@@ -104,29 +104,29 @@ function callAsk(msg, callback) {
 route.post('/web', function(req, res){
   var msg = req.body.message
 
-  MongoClient.connect(url, function(err, db) {
-    db.collection('chat').insertOne({
-      "message": msg,
-      "side": 'client',
-      timestamps: true
-    }, function(err, result) {
-      console.log('Client Inserted');
-    })
+  // MongoClient.connect(url, function(err, db) {
+  //   db.collection('chat').insertOne({
+  //     "message": msg,
+  //     "side": 'client',
+  //     timestamps: true
+  //   }, function(err, result) {
+  //     console.log('Client Inserted');
+  //   })
 
-  })
+  // })
 
   callAsk(msg, reply=> {
     res.send(reply);
-    MongoClient.connect(url, function(err, db) {
-      db.collection('chat').insertOne({
-        "message": reply,
-        "side": 'bot',
-        timestamps: true
-      }, function(err, result) {
-        console.log('BOT Inserted');
-      })
+    // MongoClient.connect(url, function(err, db) {
+    //   db.collection('chat').insertOne({
+    //     "message": reply,
+    //     "side": 'bot',
+    //     timestamps: true
+    //   }, function(err, result) {
+    //     console.log('BOT Inserted');
+    //   })
 
-    })
+    // })
   })
 })
 
@@ -134,23 +134,6 @@ route.post('/web', function(req, res){
 
 
 
-route.get('/chats', function(req, res) {
-  var lst = []
-  MongoClient.connect(url, function(err, db) {
-    assert.equal(null, err);
-    var cursor = db.collection('chat').find();
-    cursor.each(function(err, doc) {
-       assert.equal(err, null);
-       if (doc != null) {
-         lst.push(doc)
-       } else {
-         res.send(lst)
-         res.sendStatus(200)
-         db.close()
-       }
-    });
-  });
-})
 
 var findChats = function(db, callback) {
    var cursor = db.collection('chat').find();
